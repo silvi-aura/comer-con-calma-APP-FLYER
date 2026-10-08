@@ -315,7 +315,7 @@ html.gate-on,html.gate-on body{overflow:hidden}
 (function () {
 'use strict';
 /* Proyecto de Firebase del canal con código de Comer con calma (colecciones propias) */
-const FB = { apiKey: 'AIzaSyCBbM7x6VMk2bLq7MCUZuqnbxFIbRdjrck', projectId: 'mi-mundo-sin-gluten' };
+const FB = { apiKey: 'AIzaSyB8gdA1rI-YoRXTJjQtCEzYesgr3wEBDWQ', projectId: 'comer-con-calma' };
 const DBURL = `https://firestore.googleapis.com/v1/projects/${FB.projectId}/databases/(default)/documents`;
 /* La misma SALT y ROUNDS tienen que estar en el panel de códigos */
 const SALT = 'comer-con-calma-2026', ROUNDS = 20000;
@@ -388,7 +388,7 @@ function devId() {
   return d;
 }
 async function fsGet(h) {
-  const r = await fetch(`${DBURL}/codigos_calma/${h}?key=${FB.apiKey}`, { cache: 'no-store' });
+  const r = await fetch(`${DBURL}/codigos/${h}?key=${FB.apiKey}`, { cache: 'no-store' });
   if (r.status === 404) return { nf: true };
   if (!r.ok) throw new Error('http ' + r.status);
   const j = await r.json(), f = j.fields || {};
@@ -397,7 +397,7 @@ async function fsGet(h) {
 }
 async function fsClaim(h, cur, dev) {
   const vals = cur.devices.concat([dev]).map(s => ({ stringValue: s }));
-  const r = await fetch(`${DBURL}/codigos_calma/${h}?updateMask.fieldPaths=devices&currentDocument.updateTime=${encodeURIComponent(cur.updateTime)}&key=${FB.apiKey}`,
+  const r = await fetch(`${DBURL}/codigos/${h}?updateMask.fieldPaths=devices&currentDocument.updateTime=${encodeURIComponent(cur.updateTime)}&key=${FB.apiKey}`,
     { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ fields: { devices: { arrayValue: { values: vals } } } }) });
   return r.ok;
 }
